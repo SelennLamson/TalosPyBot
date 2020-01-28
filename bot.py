@@ -28,7 +28,7 @@ async def on_message(message):
     slicelen = 0
 
     if utils.is_pm(message):
-        if re.match(r"[jJ][ '’′´]?(ai|es?t)( bien)? (pri[st]? con+ais+[ae]n(c|s+)es? de|lu[ets]?) ([lt]a|votre) chartr?es?,?( et)? je ((m[ '’′´]?engages? [aà]|vais) [eéèêë]tre|serai[st]?) sympas?", content):
+        if re.match(r"j[ '’′´]?(ai|es?t)( bien)? (pri[st]? con+ais+[ae]n(c|s+)es? de|lu[ets]?) ([lt]a|votre) chartr?es?,?( et)? je ((m[ '’′´]?engages? [aà]|vais) [eéèêë]tre|serai[st]?) sympas?", content.lower()):
             member = utils.user_to_member(message.author)
             if utils.is_member(member):
                 await message.channel.send("Vous êtes déjà membre, merci d'avoir lu la charte ! :smile:")
