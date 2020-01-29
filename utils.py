@@ -10,6 +10,7 @@ from commands.salon import SalonCmd
 from commands.role import RoleCmd
 from commands.stats import StatsCmd
 from commands.say import SayCmd
+from commands.addjoke import AddJokeCmd
 
 # Important roles
 botRole = 439113523616808961
@@ -31,6 +32,7 @@ class Utils:
 		self.linkedChannels = []
 		self.autoRoles = []
 		self.commands = [
+			AddJokeCmd(),
 			CandidCmd(),
 			CountCmd(),
 			HelpCmd(),

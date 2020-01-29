@@ -3,12 +3,14 @@ import json
 import re
 
 from utils import *
+from commands.fun import FunCmd
 
 config = json.loads(open("config.json", "r").read())
 cmd_prefix = config['prefix']
 
 client = discord.Client()
 utils = Utils(client)
+funcmd = FunCmd()
 
 
 @client.event
@@ -73,6 +75,9 @@ async def on_message(message):
 
     if called_cmd is not None:
         await called_cmd(client, utils, message, command, args)
+        return
+
+    await funcmd(client, utils, message, command, args)
 
 
 @client.event
