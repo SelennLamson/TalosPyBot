@@ -24,3 +24,5 @@ class AddJokeCmd(Command):
 
 		with open("data/jokes.txt", "a", encoding='utf-8') as file:
 			file.write('\n' + text.replace('\n', '\\n'))
+
+		await utils.reply(message, "la blague a été ajoutée, merci !")
