@@ -18,7 +18,7 @@ class AddJokeCmd(Command):
 			return
 
 		text = ' '.join(args)
-		if len(text) < 50 or len(text) > 300:
+		if len(text) < 20 or len(text) > 500:
 			await utils.reply(message, "la blague doit faire entre 50 et 300 caractères.")
 			return
 
@@ -26,3 +26,5 @@ class AddJokeCmd(Command):
 			file.write('\n' + text.replace('\n', '\\n'))
 
 		await utils.reply(message, "la blague a été ajoutée, merci !")
+
+		await message.channel.send(text)

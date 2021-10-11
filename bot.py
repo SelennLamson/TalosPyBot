@@ -5,13 +5,18 @@ import re
 from utils import *
 from commands.fun import FunCmd
 
+intents = discord.Intents.none()
+intents.guilds = True
+intents.members = True
+intents.voice_states = True
+intents.messages = True
+
 config = json.loads(open("config.json", "r").read())
 cmd_prefix = config['prefix']
 
-client = discord.Client()
+client = discord.Client(intents=intents)
 utils = Utils(client)
 funcmd = FunCmd()
-
 
 @client.event
 async def on_ready():
@@ -19,10 +24,13 @@ async def on_ready():
     utils.initialize()
     await client.change_presence(activity=discord.Game(name="ASSO en binaire"))
 
-
 @client.event
 async def on_message(message):
     if message.author == client.user:
+        return
+
+    if utils.talosLab is None:
+        utils.initialize()
         return
 
     mention = "<@!{}>".format(client.user.id)
@@ -50,6 +58,9 @@ async def on_message(message):
     elif str.startswith(content, cmd_prefix):
         slicelen = len(cmd_prefix)
     elif not utils.is_pm(message):
+        if message.channel == utils.presentationsChan:
+            await utils.generalChan.send(utils.user_to_member(message.author).mention + " vient de poster sa <#" + str(utils.presentationsChan.id) + "> ! Allez la lire et souhaitez-lui la bienvenue ! :wave: \n\n" + message.jump_url)
+
         return
 
     command = None
@@ -60,24 +71,25 @@ async def on_message(message):
 
     called_cmd = None
     member = utils.user_to_member(message.author)
-    for cmd in utils.commands:
-        if command in cmd.calls:
-            if cmd.has_role(utils, member):
-                if (utils.is_pm(message) and not cmd.serv_only) or (not utils.is_pm(message) and not cmd.pm_only):
-                    called_cmd = cmd
-                elif utils.is_pm(message):
-                    await message.author.send("Cette commande doit s'utiliser sur le serveur uniquement.")
+    if member is not None:
+        for cmd in utils.commands:
+            if command in cmd.calls:
+                if cmd.has_role(utils, member):
+                    if (utils.is_pm(message) and not cmd.serv_only) or (not utils.is_pm(message) and not cmd.pm_only):
+                        called_cmd = cmd
+                    elif utils.is_pm(message):
+                        await message.author.send("Cette commande doit s'utiliser sur le serveur uniquement.")
+                    else:
+                        await message.author.send("Cette commande s'utilise en MP uniquement.")
                 else:
-                    await message.author.send("Cette commande s'utilise en MP uniquement.")
-            else:
-                await utils.reply(message, "vous n'avez pas la permission d'utiliser cette commande.")
-            break
+                    await utils.reply(message, "vous n'avez pas la permission d'utiliser cette commande.")
+                break
 
-    if called_cmd is not None:
-        await called_cmd(client, utils, message, command, args)
-        return
+        if called_cmd is not None:
+            await called_cmd(client, utils, message, command, args)
+            return
 
-    await funcmd(client, utils, message, command, args)
+        await funcmd(client, utils, message, command, args)
 
 
 @client.event

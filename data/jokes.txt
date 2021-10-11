@@ -1,1 +1,3 @@
-Quel est le point commun entre des spaghetti et un robot ?\n\nIls sont tous les deux automates !
+Joke 1
+Joke 2
+Joke 3

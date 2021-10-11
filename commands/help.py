@@ -45,7 +45,7 @@ class HelpCmd(Command):
 					helptext += "```"
 					break
 			if helptext == "":
-				helptext = "La commande !" + detail + " n'existe pas ou ne vous est pas accessible, désolé !"
+				helptext = "La commande !" + details + " n'existe pas ou ne vous est pas accessible, désolé !"
 		else:
 			helptext = "```Commandes accessibles :\n"
 			for c in commands:

@@ -1,4 +1,5 @@
 from discord import Guild, TextChannel, VoiceChannel, DMChannel, Member
+from discord.utils import get
 
 from commands.help import HelpCmd
 from commands.count import CountCmd
@@ -11,6 +12,8 @@ from commands.role import RoleCmd
 from commands.stats import StatsCmd
 from commands.say import SayCmd
 from commands.addjoke import AddJokeCmd
+from commands.game import GameCmd
+from commands.reward import RewardCmd
 
 # Important roles
 botRole = 439113523616808961
@@ -29,16 +32,20 @@ class Utils:
 		self.testChan: TextChannel = None
 		self.candidChan: TextChannel = None
 		self.modChan: TextChannel = None
+		self.presentationsChan: TextChannel = None
+		self.generalChan: TextChannel = None
 		self.linkedChannels = []
 		self.autoRoles = []
 		self.commands = [
 			AddJokeCmd(),
 			CandidCmd(),
 			CountCmd(),
+			GameCmd(),
 			HelpCmd(),
 			PingCmd(),
 			PurgeCmd(),
 			ReportCmd(),
+			RewardCmd(),
 			RoleCmd(),
 			SalonCmd(),
 			SayCmd(),
@@ -50,13 +57,16 @@ class Utils:
 		self.testChan = self.talosLab.get_channel(439113892048928790)
 		self.candidChan = self.talosLab.get_channel(438433444070948864)
 		self.modChan = self.talosLab.get_channel(438433444070948864)
+		self.presentationsChan = self.talosLab.get_channel(442019051242258433)
+		self.generalChan = self.talosLab.get_channel(438379867218771970)
 
 		# [[VoiceChan, TextChan], [..., ...], ...]
 		self.linkedChannels =[[438440224368885790, 440164468207517699],
 							  [438440317134307350, 440164488478720012],
 							  [440112635367915520, 440164519143014410]]
 	
-		self.autoRoles =[[450314792595488782, "Ciné 2.39", "pour être notifié par les news du club ciné."],
+		self.autoRoles =[[585573236142637060, "Groupe efficacité", "parce que vous voulez devenir E-FFI-CACE !"],
+						 [450314792595488782, "Ciné 2.39", "pour être notifié par les news du club ciné."],
 						 [450315068660383764, "Débatoire", "pour être notifié par les news du débatoire."],
 						 [450784702761009154, "FrogLover", "parce les grenouilles ouvrent les portes d'un monde étrange."],
 						 [457272560053125123, "Jeux", "pour être notifié des différents jeux organisés."],
@@ -92,19 +102,19 @@ class Utils:
 		return self.has_role(member, [memberRole]) and not self.is_vip(member)
 
 	def get_admins(self):
-		return self.talosLab.roles.get(adminRole).members
+		return get(self.talosLab.roles, id=adminRole).members
 
 	def get_moderators(self):
-		return self.talosLab.roles.get(moderatorRole).members
+		return get(self.talosLab.roles, id=moderatorRole).members
 
 	def get_animators(self):
-		return self.talosLab.roles.get(animatorRole).members
+		return get(self.talosLab.roles, id=animatorRole).members
 
 	def get_videomakers(self):
-		return self.talosLab.roles.get(videomakerRole).members
+		return get(self.talosLab.roles, id=videomakerRole).members
 
 	def get_members(self):
-		return self.talosLab.roles.get(memberRole).members
+		return get(self.talosLab.roles, id=memberRole).members
 
 	def get_vips(self):
 		return [m for m in self.talosLab.members if self.is_vip(m)]
